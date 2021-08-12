@@ -9,6 +9,11 @@ var url = require('url');
 const nocache = require('nocache');
 const cors = require('cors');
 
+let port = 8000;
+if (process.argv[2]) {
+    port = process.argv[2];
+}
+
 app.use(cors())
 app.use(nocache());
 app.get('/*.*' , cors(), function(req, res) {
@@ -31,5 +36,6 @@ function serveFile(res, pathName, mime) {
     });
 }
 
-server.listen(8000);
-console.log('HTTP and BinaryJS server started on port 8000');
+
+server.listen(port);
+console.log(`HTTP and BinaryJS server started on port ${port}`);
