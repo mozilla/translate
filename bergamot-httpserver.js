@@ -46,7 +46,7 @@ function serveFile(res, pathName, mime) {
 https
   .createServer(
     {
-      key: fs.readFileSync(`${certpath}/key.pem`),
+      key: fs.readFileSync(`${certpath}/privkey.pem`),
       cert: fs.readFileSync(`${certpath}/cert.pem`),
       ca: fs.readFileSync(`${certpath}/chain.pem`),
     },
