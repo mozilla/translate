@@ -1,17 +1,23 @@
 require(__dirname  + '/helper.js');
 
-var http = require('http');
-var express = require('express');
-var app = express();
-var server = http.createServer(app);
-var fs = require('fs');
-var url = require('url');
+const http = require('http');
+const https = require('https')
+const express = require('express');
+const app = express();
+const server = http.createServer(app);
+const fs = require('fs');
+const url = require('url');
 const nocache = require('nocache');
 const cors = require('cors');
 
 let port = 8000;
 if (process.argv[2]) {
     port = process.argv[2];
+}
+
+let certpath = "/etc/letsencrypt";
+if (process.argv[3]) {
+    certpath = process.argv[3];
 }
 
 app.use(cors())
@@ -36,6 +42,19 @@ function serveFile(res, pathName, mime) {
     });
 }
 
+
+https
+  .createServer(
+    {
+      key: fs.readFileSync(`${certpath}/key.pem`),
+      cert: fs.readFileSync(`${certpath}/cert.pem`),
+      ca: fs.readFileSync(`${certpath}/chain.pem`),
+    },
+    app
+  )
+  .listen(443, () => {
+    console.log('Listening https port 443')
+  })
 
 server.listen(port);
 console.log(`HTTP and BinaryJS server started on port ${port}`);
