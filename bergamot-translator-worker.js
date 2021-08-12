@@ -1,4 +1,4 @@
-var BERGAMOT_VERSION_FULL = "v0.3.1+d31f963";
+var BERGAMOT_VERSION_FULL = "v0.3.1+9994d4a";
 
 function GROWABLE_HEAP_I8() {
  if (wasmMemory.buffer != buffer) {
@@ -232,7 +232,7 @@ function convertJsFunctionToWasm(func, sig) {
  }
  typeSection[1] = typeSection.length - 2;
  var bytes = new Uint8Array([ 0, 97, 115, 109, 1, 0, 0, 0 ].concat(typeSection, [ 2, 7, 1, 1, 101, 1, 102, 0, 0, 7, 5, 1, 1, 102, 0, 0 ]));
- var module = new WebAssembly.Module(bytes, {simdWormhole:true});
+ var module = new WebAssembly.Module(bytes);
  var instance = new WebAssembly.Instance(module, {
   "e": {
    "f": func
@@ -808,7 +808,7 @@ function createWasm() {
  }
  function instantiateArrayBuffer(receiver) {
   return getBinaryPromise().then(function(binary) {
-   return WebAssembly.instantiate(binary, info, {simdWormhole:true});
+   return WebAssembly.instantiate(binary, info);
   }).then(receiver, function(reason) {
    err("failed to asynchronously prepare wasm: " + reason);
    abort(reason);
@@ -819,7 +819,7 @@ function createWasm() {
    return fetch(wasmBinaryFile, {
     credentials: "same-origin"
    }).then(function(response) {
-    var result = WebAssembly.instantiateStreaming(response, info, {simdWormhole:true});
+    var result = WebAssembly.instantiateStreaming(response, info);
     return result.then(receiveInstantiatedSource, function(reason) {
      err("wasm streaming compile failed: " + reason);
      err("falling back to ArrayBuffer instantiation");
