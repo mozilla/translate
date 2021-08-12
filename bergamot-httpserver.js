@@ -30,6 +30,9 @@ app.use(cors())
 app.use(nocache());
 
 app.get('/', cors(), function(req, res) {
+    if (!req.secure && skipssl != 1) {
+        return res.redirect("https://" + req.headers.host + req.url);
+    }
     res.sendFile(path.join(__dirname + '/index.html'));
     res.header('Cross-Origin-Embedder-Policy','require-corp');
     res.header('Cross-Origin-Opener-Policy','same-origin');
