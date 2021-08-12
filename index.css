@@ -1,0 +1,17 @@
+body, html {
+    margin: 1%;
+}
+
+textarea, #to, #from {
+    margin: 0;
+    padding: 0;
+    max-width: 45%;
+    width:45%;
+    resize: none;
+    display:inline-block;
+}
+
+div {
+    width: 100%;
+    text-align:center;
+}

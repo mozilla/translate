@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>Mozilla Translations</title>
+  <link rel="stylesheet" href="index.css">
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+</head>
+<body>
+
+<div id="divradios">
+  <label>Choose the model to use</label>
+  <input type="radio" name="modellang" value="enes"/><label>English to Spanish</label>
+  <input type="radio" name="modellang" value="esen"/><label>Spanish to English</label>
+  <input type="radio" name="modellang" value="eten"/><label>Estonian to English</label>
+  <input type="radio" name="modellang" value="enet"/><label>English to Estonian</label>
+  <input type="radio" name="modellang" value="ende"/><label>English to German</label>
+  <input type="button" id="load" value="Load Model"/>
+</div>
+<br>
+<div id="divtranslation">
+  <textarea id="from" name="from" rows="5"></textarea>
+  <textarea id="to" name="to" rows="5" readonly></textarea>
+</div>
+
+<script src="index.js"></script>
+<script src="bergamot-translator-worker.js"></script>
+</body>
+</html>
