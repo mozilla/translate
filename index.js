@@ -1,43 +1,44 @@
+var worker;
 const log = (message) => {
-  console.log(message);
-};
+  console.debug(message);
+}
 
 if (window.Worker) {
+  var worker = new Worker('worker.js');
+  worker.postMessage(["load"]);
+}
 
-  const translationWorker = new Worker("worker.js");
-  translationWorker.addEventListener("error", (e) => {
-    const error = ['ERROR: Line ', e.lineno, ' in ', e.filename, ': ', e.message].join('');
-    console.log(error);
-  });
+document.querySelector("#load").addEventListener("click", async() => {
+  document.querySelector("#load").disabled = true;
+  const lang = document.querySelector('input[name="modellang"]:checked').value;
+  const from = lang.substring(0, 2);
+  const to = lang.substring(2, 4);
+  worker.postMessage(["construct", from, to]);
+  document.querySelector("#load").disabled = false;
+  //log('Model Alignment:', translationService.isAlignmentSupported());
+});
 
-  // sends the proper msg to the worker in order to construct the obj
-  document.querySelector("#load").addEventListener("click", async() => {
-    document.querySelector("#load").disabled = true;
-    const lang = document.querySelector('input[name="modellang"]:checked').value;
-    const from = lang.substring(0, 2);
-    const to = lang.substring(2, 4);
-    log(`sending msg to construct the service ${from} ${to}`);
-    translationWorker.postMessage(["load", from, to]);
-    log(`sending msg to construct the service ${from} ${to}`);
-  });
 
-  document.querySelector("#from").addEventListener('keydown', function(event) {
-    const text = document.querySelector('#from').value;
-    translationWorker.postMessage(["translate", text]);
-  });
+document.querySelector("#from").addEventListener('keydown', function(event) {
+  translateCall();
+});
 
-  translationWorker.onmessage = function(e) {
-    console.log('Message received from worker');
-    if (e.data[0] === 'load') {
-      document.querySelector("#load").disabled = false;
-      log("load complete");
-    } else if (e.data[0] === 'translation') {
-      console.log('translation mg recevied back');
-      //result.textContent = e.data;
-      //document.querySelector('#to').value = translatedParagraphs.join("\n");
-      // document.querySelector('#to').value = e;
-    }
+const translateCall = () => {
+  const text = document.querySelector('#from').value;
+  const paragraphs = text.split("\n");
+  let wordCount = 0;
+  paragraphs.forEach(sentence => {
+    wordCount += sentence.trim().split(" ").filter(word => word.trim() !== "").length;
+  })
+  const start = Date.now();
+  worker.postMessage(["translate", paragraphs]);
+  const secs = (Date.now() - start) / 1000;
+  log(`Translation of (${wordCount}) words took ${secs} secs (${Math.round(wordCount / secs)} words per second)`);
+}
+
+worker.onmessage = function(e) {
+  console.debug(`Message received from worker ${e}`);
+  if (e.data[0] === 'para') {
+    document.querySelector('#to').value = e.data[1].join("\n");
   }
-} else {
-  alert("This browser does not support webworkers. Download Firefox.");
 }
