@@ -2,26 +2,57 @@
 <html>
 <head>
   <title>Mozilla Translations</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="css/index.css">
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
-
-<div id="divradios">
-  <label>Choose the model to use</label>
-  <input type="radio" name="modellang" value="enes"/><label>English to Spanish</label>
-  <input type="radio" name="modellang" value="esen"/><label>Spanish to English</label>
-  <input type="radio" name="modellang" value="eten"/><label>Estonian to English</label>
-  <input type="radio" name="modellang" value="enet"/><label>English to Estonian</label>
-  <input type="radio" name="modellang" value="ende"/><label>English to German</label>
-  <input type="button" id="load" value="Load Model"/>
-</div>
 <br>
-<div id="divtranslation">
-  <textarea id="from" name="from" rows="5"></textarea>
-  <textarea id="to" name="to" rows="5" readonly></textarea>
-</div>
-
-<script src="index.js"></script>
+<br>
+<table id="maintable">
+  <tr>
+    <td>
+      <div class="dropdown">
+        <button id="frombtn" name="frombtn" class="dropbtn">From</button>
+        <div id="fromDropdown" class="dropdown-content" click="selectLanguage()">
+          <a name="langFrom" code="en" href="#">English</a>
+          <a name="langFrom" code="it" href="#">Italian</a>
+          <a name="langFrom" code="pt" href="#">Portuguese</a>
+          <a name="langFrom" code="ru" href="#">Russian</a>
+          <a name="langFrom" code="cs" href="#">Czech</a>
+          <a name="langFrom" code="de" href="#">German</a>
+          <a name="langFrom" code="es" href="#">Spanish</a>
+          <a name="langFrom" code="et" href="#">Estonian</a>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div class="dropdown">
+        <button id="tobtn" name="tobtn" class="dropbtn">To</button>
+        <div id="toDropdown" class="dropdown-content" click="selectLanguage()">
+          <a name="langTo" code="en" href="#">English</a>
+          <a name="langTo" code="it" href="#">Italian</a>
+          <a name="langTo" code="pt" href="#">Portuguese</a>
+          <a name="langTo" code="ru" href="#">Russian</a>
+          <a name="langTo" code="cs" href="#">Czech</a>
+          <a name="langTo" code ="de" href="#">German</a>
+          <a name="langTo" code="es" href="#">Spanish</a>
+          <a name="langTo" code="et" href="#">Estonian</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <textarea id="from" name="from" rows="5"></textarea>
+    </td>
+    <td>
+      <textarea id="to" name="to" rows="5" readonly></textarea>
+    </td>
+  </tr>
+  <tr style="height: 5em">
+    <td id="statustd" colspan=2 style="text-align: center; vertical-align: middle;"></td>
+  </tr>
+</table>
+<script src="js/index.js"></script>
 </body>
 </html>

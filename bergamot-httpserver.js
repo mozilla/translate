@@ -1,5 +1,3 @@
-require(__dirname  + '/helper.js');
-
 const http = require('http');
 const https = require('https')
 const express = require('express');
@@ -71,6 +69,25 @@ if (skipssl != 1){
         console.log('Listening https port 443')
     })
 }
+
+const Helper = {
+    types: {
+       "wasm" : "application/wasm"
+       , "js" : "application/javascript"
+       , "html" : "text/html"
+       , "htm" : "text/html"
+       , "ico" : "image/vnd.microsoft.icon"
+       , "css" : "text/css"
+    },
+    getMime: function(u) {
+        var ext = this.getExt(u.pathname).replace('.', '');
+        return this.types[ext.toLowerCase()] || 'application/octet-stream';
+    },
+    getExt: function(path) {
+        var i = path.lastIndexOf('.');
+        return (i < 0) ? '' : path.substr(i);
+    }
+};
 
 server.listen(port);
 console.log(`HTTP and BinaryJS server started on port ${port}`);
