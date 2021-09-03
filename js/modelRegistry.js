@@ -1,7 +1,30 @@
 
-const rootURL = "https://storage.googleapis.com/bergamot-models-sandbox/0.2.7";
+const rootURL = "https://storage.googleapis.com/bergamot-models-sandbox/0.2.9";
 
 const modelRegistry = {
+  enit: {
+    vocab: {
+      name: "vocab.enit.spm",
+      size: 814128,
+      estimatedCompressedSize: 405338,
+      expectedSha256Hash:
+        "de8cbeb79e0139304bfa47e8559f2447016bf9906225a97d3df1baed4de8f3a3",
+    },
+    lex: {
+      name: "lex.50.50.enit.s2t.bin",
+      size: 4489920,
+      estimatedCompressedSize: 2409986,
+      expectedSha256Hash:
+        "bb1fad3b3f6a13ebce1698cf7f39ca736c4dea4525f3dab5e1a78436f07445e6",
+    },
+    model: {
+      name: "model.enit.intgemm.alphas.bin",
+      size: 17140836,
+      estimatedCompressedSize: 13283223,
+      expectedSha256Hash:
+        "a5ce3723f62ead92a0e0373b6df0ad8e3e6d22963adb1333984206e33b8b6c61",
+    },
+  },
   enpt: {
     vocab: {
       name: "vocab.enpt.spm",
@@ -138,6 +161,29 @@ const modelRegistry = {
       estimatedCompressedSize: 13045032,
       expectedSha256Hash:
         "5b16661e2864dc50b2f4091a16bdd4ec8d8283e04271e602159ba348df5d6e2d",
+    },
+  },
+  deen: {
+    vocab: {
+      name: "vocab.deen.spm",
+      size: 784269,
+      estimatedCompressedSize: 410738,
+      expectedSha256Hash:
+        "417668f2ed297970febafb5b079a9d5ebc4ed0b3550ac8386d67a90473a09bd7",
+    },
+    lex: {
+      name: "lex.50.50.deen.s2t.bin",
+      size: 5047568,
+      estimatedCompressedSize: 2657472,
+      expectedSha256Hash:
+        "2f7c0f7bbce97ae5b52454074a892ba7b7610fb98e3c5d341e4ca79f0850c4de",
+    },
+    model: {
+      name: "model.deen.intgemm.alphas.bin",
+      size: 17140837,
+      estimatedCompressedSize: 13091214,
+      expectedSha256Hash:
+        "dda44d87ab0d8ad3b3871122fd3ee385f37878183a8b4ec139cd909531ec5009",
     },
   },
   encs: {
