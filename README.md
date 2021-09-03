@@ -18,6 +18,7 @@ Compatible and tested on:
 ## Testing locally
 
 ```
-npm install
-bash start_dev_server.sh
+$npm install
+$bash start_dev_server.sh
+$firefox https://mozilla.github.io/translate
 ```
