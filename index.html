@@ -1,58 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-  <title>Mozilla Translations</title>
-  <link rel="stylesheet" href="css/index.css">
-  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-</head>
-<body>
-<br>
-<br>
-<table id="maintable">
-  <tr>
-    <td>
-      <div class="dropdown">
-        <button id="frombtn" name="frombtn" class="dropbtn">From</button>
-        <div id="fromDropdown" class="dropdown-content" click="selectLanguage()">
-          <a name="langFrom" code="en" href="#">English</a>
-          <a name="langFrom" code="it" href="#">Italian</a>
-          <a name="langFrom" code="pt" href="#">Portuguese</a>
-          <a name="langFrom" code="ru" href="#">Russian</a>
-          <a name="langFrom" code="cs" href="#">Czech</a>
-          <a name="langFrom" code="de" href="#">German</a>
-          <a name="langFrom" code="es" href="#">Spanish</a>
-          <a name="langFrom" code="et" href="#">Estonian</a>
-        </div>
+  <head>
+    <title>Mozilla Translations</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <div class="panel panel--from">
+        <label>
+          From
+          <select id="lang-from" name="from" class="lang-select"></select>
+        </label>
+        <textarea id="input" name="input"></textarea>
       </div>
-    </td>
-    <td>
-      <div class="dropdown">
-        <button id="tobtn" name="tobtn" class="dropbtn">To</button>
-        <div id="toDropdown" class="dropdown-content" click="selectLanguage()">
-          <a name="langTo" code="en" href="#">English</a>
-          <a name="langTo" code="it" href="#">Italian</a>
-          <a name="langTo" code="pt" href="#">Portuguese</a>
-          <a name="langTo" code="ru" href="#">Russian</a>
-          <a name="langTo" code="cs" href="#">Czech</a>
-          <a name="langTo" code ="de" href="#">German</a>
-          <a name="langTo" code="es" href="#">Spanish</a>
-          <a name="langTo" code="et" href="#">Estonian</a>
-        </div>
+      <button class="swap" title="swap">↔️</button>
+      <div class="panel panel--to">
+        <label>
+          To
+          <select id="lang-to" name="to" class="lang-select"></select>
+        </label>
+        <textarea id="output" name="output" readonly></textarea>
       </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <textarea id="from" name="from" rows="5"></textarea>
-    </td>
-    <td>
-      <textarea id="to" name="to" rows="5" readonly></textarea>
-    </td>
-  </tr>
-  <tr style="height: 5em">
-    <td id="statustd" colspan=2 style="text-align: center; vertical-align: middle;"></td>
-  </tr>
-</table>
-<script src="js/index.js"></script>
-</body>
+      <div class="footer" id="status"></div>
+    </div>
+    <script src="js/index.js"></script>
+  </body>
 </html>

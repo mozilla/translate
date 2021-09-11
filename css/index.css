@@ -1,80 +1,99 @@
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font: inherit;
-    vertical-align: baseline;
-    font-family: Optima, Helvetica, Arial;
+* {
+  box-sizing: border-box;
 }
 
-textarea, #to, #from {
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
-    width:100%;
-    resize: none;
-    display:inline-block;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-size: 18px;
+  font-family: Optima, Helvetica, Arial;
 }
 
-#divtranslation {
-    width: 100%;
-    text-align:center;
+body {
+  padding: 1rem;
 }
 
+.app {
+  padding: 1rem;
+  display: grid;
+  grid: "from swap to" 1fr "status status status" auto / 1fr auto 1fr;
+  grid-gap: 1rem;
+  overflow: hidden;
+  min-height: 400px;
+  max-width: 1024px;
+  margin: 1em auto;
+}
 
- /* Dropdown Button */
- .dropbtn {
-    background-color: #3498DB;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
+@media screen and (max-width: 640px) {
+  .app {
+    grid: "from from" auto "status swap" auto "to to" auto / 1fr;
   }
+}
 
-  /* Dropdown button on hover & focus */
-  .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
-  }
+.panel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-gap: 1rem;
+}
 
-  /* The container <div> - needed to position the dropdown content */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
+label {
+  padding: 0 0.5em;
+  display: flex;
+  align-items: center;
+}
 
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
+.lang-select {
+  padding: 0.25rem 0.5rem;
+  margin-left: 1rem;
+  background: #f4f4f4;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
 
-  /* Links inside the dropdown */
-  .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
+.panel--from {
+  grid-area: from;
+}
 
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #ddd}
+.panel--to {
+  grid-area: to;
+}
 
-  /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-  .show {display:block;}
+.swap {
+  align-self: center;
+  grid-area: swap;
+  font-size: 1.1rem;
+}
 
-  table {
-      width: 90%;
-      margin-left:auto;
-      margin-right:auto;
-  }
+#status {
+  grid-area: status;
+  text-align: center;
+  align-self: center;
+}
 
-  td {
-      width: 50%;
-  }
+textarea {
+  padding: 1rem;
+  font-family: sans-serif;
+  font-size: 1rem;
+  resize: none;
+  border-radius: 2px;
+  border: 1px solid #ccc;
+}
 
+button {
+  cursor: pointer;
+  border: 1px solid #88c;
+  border-radius: 4px;
+  background: #eef;
+  padding: 0;
+  padding: 0.25rem 0.5rem;
+}
+button:hover {
+  background: #cce;
+}
+
+#output {
+  background-color: #f4f4f4;
+}
