@@ -20,7 +20,7 @@ const langs = [
 
 if (window.Worker) {
   worker = new Worker("js/worker.js");
-  worker.postMessage(["load"]);
+  worker.postMessage(["import"]);
 }
 
 document.querySelector("#input").addEventListener("keyup", function (event) {
@@ -32,17 +32,19 @@ const translateCall = () => {
   if (!text.trim().length) return;
   const paragraphs = text.split("\n");
   $("#output").setAttribute("disabled", true);
-  worker.postMessage(["translate", paragraphs]);
+  const lngFrom = langFrom.value;
+  const lngTo = langTo.value;
+  worker.postMessage(["translate", lngFrom, lngTo, paragraphs]);
 };
 
 worker.onmessage = function (e) {
-  if (e.data[0] === "para" && e.data[1]) {
+  if (e.data[0] === "translate_reply" && e.data[1]) {
     document.querySelector("#output").value = e.data[1].join("\n\n");
     $("#output").removeAttribute("disabled");
-  } else if (e.data[0] === "log" && e.data[1]) {
+  } else if (e.data[0] === "load_model_reply" && e.data[1]) {
     status(e.data[1]);
     translateCall();
-  } else if (e.data[0] === "modelRegistry" && e.data[1]) {
+  } else if (e.data[0] === "import_reply" && e.data[1]) {
     modelRegistry = e.data[1];
     init();
   }
@@ -56,12 +58,13 @@ langs.forEach(([code, name]) => {
 const loadModel = () => {
   const lngFrom = langFrom.value;
   const lngTo = langTo.value;
-  if (modelRegistry[`${lngFrom}${lngTo}`]) {
+  if (lngFrom !== lngTo) {
     status(`Installing model...`);
-    console.log("loading model", lngFrom, lngTo);
-    worker.postMessage(["construct", lngFrom, lngTo]);
+    console.log(`Loading model '${lngFrom}${lngTo}'`);
+    worker.postMessage(["load_model", lngFrom, lngTo]);
   } else {
-    status(`Combination not supported.`);
+    const input = document.querySelector("#input").value;
+    document.querySelector("#output").value = input;
   }
 };
 
