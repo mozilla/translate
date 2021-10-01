@@ -1,4 +1,4 @@
-var BERGAMOT_VERSION_FULL = "v0.3.1+8e43742";
+var BERGAMOT_VERSION_FULL = "v0.3.1+c7b626d";
 
 var Module = typeof Module !== "undefined" ? Module : {};
 
@@ -4876,6 +4876,19 @@ function __embind_register_memory_view(rawType, dataTypeIndex, name) {
  });
 }
 
+function __embind_register_smart_ptr(rawType, rawPointeeType, name, sharingPolicy, getPointeeSignature, rawGetPointee, constructorSignature, rawConstructor, shareSignature, rawShare, destructorSignature, rawDestructor) {
+ name = readLatin1String(name);
+ rawGetPointee = embind__requireFunction(getPointeeSignature, rawGetPointee);
+ rawConstructor = embind__requireFunction(constructorSignature, rawConstructor);
+ rawShare = embind__requireFunction(shareSignature, rawShare);
+ rawDestructor = embind__requireFunction(destructorSignature, rawDestructor);
+ whenDependentTypesAreResolved([ rawType ], [ rawPointeeType ], function(pointeeType) {
+  pointeeType = pointeeType[0];
+  var registeredPointer = new RegisteredPointer(name, pointeeType.registeredClass, false, false, true, pointeeType, sharingPolicy, rawGetPointee, rawConstructor, rawShare, rawDestructor);
+  return [ registeredPointer ];
+ });
+}
+
 function __embind_register_std_string(rawType, name) {
  name = readLatin1String(name);
  var stdStringIsUTF8 = name === "std::string";
@@ -5063,18 +5076,46 @@ function __embind_register_void(rawType, name) {
  });
 }
 
-function __emval_incref(handle) {
- if (handle > 4) {
-  emval_handle_array[handle].refcount += 1;
- }
-}
-
 function requireRegisteredType(rawType, humanName) {
  var impl = registeredTypes[rawType];
  if (undefined === impl) {
   throwBindingError(humanName + " has unknown type " + getTypeName(rawType));
  }
  return impl;
+}
+
+function __emval_lookupTypes(argCount, argTypes) {
+ var a = new Array(argCount);
+ for (var i = 0; i < argCount; ++i) {
+  a[i] = requireRegisteredType(HEAP32[(argTypes >> 2) + i], "parameter " + i);
+ }
+ return a;
+}
+
+function requireHandle(handle) {
+ if (!handle) {
+  throwBindingError("Cannot use deleted val. handle = " + handle);
+ }
+ return emval_handle_array[handle].value;
+}
+
+function __emval_call(handle, argCount, argTypes, argv) {
+ handle = requireHandle(handle);
+ var types = __emval_lookupTypes(argCount, argTypes);
+ var args = new Array(argCount);
+ for (var i = 0; i < argCount; ++i) {
+  var type = types[i];
+  args[i] = type["readValueFromPointer"](argv);
+  argv += type["argPackAdvance"];
+ }
+ var rv = handle.apply(undefined, args);
+ return __emval_register(rv);
+}
+
+function __emval_incref(handle) {
+ if (handle > 4) {
+  emval_handle_array[handle].refcount += 1;
+ }
 }
 
 function __emval_take_value(type, argv) {
@@ -5957,11 +5998,13 @@ var asmLibraryArg = {
  "_embind_register_float": __embind_register_float,
  "_embind_register_integer": __embind_register_integer,
  "_embind_register_memory_view": __embind_register_memory_view,
+ "_embind_register_smart_ptr": __embind_register_smart_ptr,
  "_embind_register_std_string": __embind_register_std_string,
  "_embind_register_std_wstring": __embind_register_std_wstring,
  "_embind_register_value_object": __embind_register_value_object,
  "_embind_register_value_object_field": __embind_register_value_object_field,
  "_embind_register_void": __embind_register_void,
+ "_emval_call": __emval_call,
  "_emval_decref": __emval_decref,
  "_emval_incref": __emval_incref,
  "_emval_take_value": __emval_take_value,
@@ -5999,12 +6042,12 @@ var _free = Module["_free"] = function() {
  return (_free = Module["_free"] = Module["asm"]["free"]).apply(null, arguments);
 };
 
-var _memset = Module["_memset"] = function() {
- return (_memset = Module["_memset"] = Module["asm"]["memset"]).apply(null, arguments);
-};
-
 var _malloc = Module["_malloc"] = function() {
  return (_malloc = Module["_malloc"] = Module["asm"]["malloc"]).apply(null, arguments);
+};
+
+var _memset = Module["_memset"] = function() {
+ return (_memset = Module["_memset"] = Module["asm"]["memset"]).apply(null, arguments);
 };
 
 var ___errno_location = Module["___errno_location"] = function() {
@@ -6149,4 +6192,3 @@ if (Module["preInit"]) {
 noExitRuntime = true;
 
 run();
-
