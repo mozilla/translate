@@ -60,10 +60,21 @@ langs.forEach(([code, name]) => {
     langTo.innerHTML += `<option value="${code}">${name}</option>`;
 });
 
+const isSupported = (lngFrom, lngTo) => {
+    return (`${lngFrom}${lngTo}` in modelRegistry) ||
+        ((`${lngFrom}en` in modelRegistry) && (`en${lngTo}` in modelRegistry))
+}
+
 const loadModel = () => {
     const lngFrom = langFrom.value;
     const lngTo = langTo.value;
     if (lngFrom !== lngTo) {
+        if (!isSupported(lngFrom, lngTo)) {
+            status("Language pair is not supported");
+            document.querySelector("#output").value = "";
+            return;
+        }
+
         status(`Installing model...`);
         console.log(`Loading model '${lngFrom}${lngTo}'`);
         worker.postMessage(["load_model", lngFrom, lngTo]);
