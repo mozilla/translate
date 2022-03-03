@@ -13,13 +13,13 @@ const langs = [
     ["en", "English"],
     ["et", "Estonian"],
     ["de", "German"],
-    ["is", "Icelandic"],
-    ["it", "Italian"],
+    ["is", "Icelandic (beta)"],
+    ["it", "Italian (beta)"],
     ["nb", "Norwegian Bokmål"],
-    ["nn", "Norwegian Nynorsk"],
-    ["fa", "Persian"],
-    ["pt", "Portuguese"],
-    ["ru", "Russian"],
+    ["nn", "Norwegian Nynorsk (beta)"],
+    ["fa", "Persian (beta)"],
+    ["pt", "Portuguese (beta)"],
+    ["ru", "Russian (beta)"],
     ["es", "Spanish"]
 ];
 
