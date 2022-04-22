@@ -8,21 +8,29 @@ const status = message => ($("#status").innerText = message);
 const langFrom = $("#lang-from");
 const langTo = $("#lang-to");
 
-const langs = [
-    ["bg", "Bulgarian"],
-    ["cs", "Czech"],
-    ["en", "English"],
-    ["et", "Estonian"],
-    ["de", "German"],
-    ["is", "Icelandic"],
-    ["it", "Italian"],
-    ["nb", "Norwegian Bokmål"],
-    ["nn", "Norwegian Nynorsk"],
-    ["fa", "Persian"],
-    ["pt", "Portuguese"],
-    ["ru", "Russian"],
-    ["es", "Spanish"]
-];
+const langs = {
+    "bg": "Bulgarian",
+    "cs": "Czech",
+    "nl": "Dutch",
+    "en": "English",
+    "et": "Estonian",
+    "de": "German",
+    "fr": "French",
+    "is": "Icelandic",
+    "it": "Italian",
+    "nb": "Norwegian Bokmål",
+    "nn": "Norwegian Nynorsk",
+    "fa": "Persian",
+    "pl": "Polish",
+    "pt": "Portuguese",
+    "ru": "Russian",
+    "es": "Spanish",
+    "uk": "Ukranian"
+};
+
+let supportedFromCodes = {};
+let supportedToCodes = {};
+let currentTo = null;
 
 if (window.Worker) {
     worker = new Worker("js/worker.js");
@@ -57,11 +65,6 @@ worker.onmessage = function (e) {
     }
 };
 
-langs.forEach(([code, name]) => {
-    langFrom.innerHTML += `<option value="${code}">${name}</option>`;
-    langTo.innerHTML += `<option value="${code}">${name}</option>`;
-});
-
 const isSupported = (lngFrom, lngTo) => {
     return (`${lngFrom}${lngTo}` in modelRegistry) ||
         ((`${lngFrom}en` in modelRegistry) && (`en${lngTo}` in modelRegistry))
@@ -86,35 +89,79 @@ const loadModel = () => {
     }
 };
 
+const findFirstSupportedTo = () => {
+    return Object.entries(supportedToCodes).find(([code, ]) => code !== langFrom.value)[0]
+}
+
 langFrom.addEventListener("change", e => {
+    const setToCode = (currentTo !== langFrom.value)
+      ? currentTo
+      : findFirstSupportedTo();
+    setLangs(langTo, supportedToCodes, setToCode, langFrom.value);
     loadModel();
 });
 
 langTo.addEventListener("change", e => {
+    currentTo = langTo.value;
     loadModel();
 });
 
 $(".swap").addEventListener("click", e => {
-    [langFrom.value, langTo.value] = [langTo.value, langFrom.value];
+    const prevLangFrom = langFrom.value
+    langFrom.value = langTo.value;
+
+    if (prevLangFrom in supportedToCodes) {
+        setLangs(langTo, supportedToCodes, prevLangFrom, langFrom.value);
+    }
+    else {
+        langTo.value = null;
+    }
+
     $("#input").value = $("#output").value;
     loadModel();
 });
 
+const setLangs = (selector, langsToSet, value, exlcude) => {
+    selector.innerHTML = "";
+    for (const [code, type] of Object.entries(langsToSet)) {
+        if (code === exlcude) continue;
+        let name = langs[code];
+        if (type === "dev") name += " (Beta)";
+        selector.innerHTML += `<option value="${code}">${name}</option>`;
+    }
+    selector.value = value;
+}
+
 function init() {
     ($("#version").innerText = version);
-    // try to guess input language from user agent
-    let myLang = navigator.language;
-    if (myLang) {
-        myLang = myLang.split("-")[0];
-        let langIndex = langs.findIndex(([code]) => code === myLang);
-        if (langIndex > -1) {
-            console.log("guessing input language is", myLang);
-            langFrom.value = myLang;
-        }
+
+    // parse supported languages and model types (prod or dev)
+    supportedFromCodes["en"] = "prod";
+    supportedToCodes["en"] = "prod";
+    for (const [langPair, value] of Object.entries(modelRegistry)) {
+        const firstLang = langPair.substring(0, 2);
+        const secondLang = langPair.substring(2, 4);
+        if (firstLang !== "en") supportedFromCodes[firstLang] = value.model.modelType;
+        if (secondLang !== "en") supportedToCodes[secondLang] = value.model.modelType;
     }
 
+    // try to guess input language from user agent
+    let myLang = navigator.language;
+    let setFromCode = "en";
+    if (myLang) {
+        myLang = myLang.split("-")[0];
+        if (myLang in supportedFromCodes) {
+            console.log("guessing input language is", myLang);
+            setFromCode = myLang;
+        }
+    }
+    setLangs(langFrom, supportedFromCodes, setFromCode, null);
+
     // find first output lang that *isn't* input language
-    langTo.value = langs.find(([code]) => code !== langFrom.value)[0];
+    const setToCode = findFirstSupportedTo();
+    setLangs(langTo, supportedToCodes, setToCode, setFromCode);
+    currentTo = setToCode;
+
     // load this model
     loadModel();
 }
