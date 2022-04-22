@@ -1,5 +1,6 @@
 let worker;
 let modelRegistry;
+let version;
 
 const $ = selector => document.querySelector(selector);
 const status = message => ($("#status").innerText = message);
@@ -13,13 +14,13 @@ const langs = [
     ["en", "English"],
     ["et", "Estonian"],
     ["de", "German"],
-    ["is", "Icelandic (beta)"],
-    ["it", "Italian (beta)"],
+    ["is", "Icelandic"],
+    ["it", "Italian"],
     ["nb", "Norwegian Bokmål"],
-    ["nn", "Norwegian Nynorsk (beta)"],
-    ["fa", "Persian (beta)"],
-    ["pt", "Portuguese (beta)"],
-    ["ru", "Russian (beta)"],
+    ["nn", "Norwegian Nynorsk"],
+    ["fa", "Persian"],
+    ["pt", "Portuguese"],
+    ["ru", "Russian"],
     ["es", "Spanish"]
 ];
 
@@ -51,6 +52,7 @@ worker.onmessage = function (e) {
         translateCall();
     } else if (e.data[0] === "import_reply" && e.data[1]) {
         modelRegistry = e.data[1];
+        version = e.data[2];
         init();
     }
 };
@@ -99,6 +101,7 @@ $(".swap").addEventListener("click", e => {
 });
 
 function init() {
+    ($("#version").innerText = version);
     // try to guess input language from user agent
     let myLang = navigator.language;
     if (myLang) {
