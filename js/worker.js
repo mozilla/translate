@@ -4,7 +4,10 @@ var translationService, responseOptions, input = undefined;
 var translationModels = new Map();
 
 const BERGAMOT_TRANSLATOR_MODULE = "bergamot-translator-worker.js";
-const MODEL_REGISTRY = "modelRegistry.js";
+const MODEL_REGISTRY = "registry.json";
+const rootURL = "https://storage.googleapis.com/bergamot-models-sandbox";
+let version = null;
+let modelRegistry = null;
 
 const encoder = new TextEncoder(); // string to utf-8 converter
 const decoder = new TextDecoder(); // utf-8 to string converter
@@ -16,15 +19,22 @@ var Module = {
     log(`Time until Module.preRun: ${(Date.now() - start) / 1000} secs`);
     moduleLoadStart = Date.now();
   }],
-  onRuntimeInitialized: function() {
+  onRuntimeInitialized: async function() {
     log(`Wasm Runtime initialized Successfully (preRun -> onRuntimeInitialized) in ${(Date.now() - moduleLoadStart) / 1000} secs`);
-    importScripts(MODEL_REGISTRY);
-    postMessage([`import_reply`, modelRegistry]);
+    let resp = await fetch(`${rootURL}/latest.txt`);
+    version = await resp.text();
+    resp = await fetch(`${rootURL}/${version}/${MODEL_REGISTRY}`);
+    modelRegistry = await resp.json();
+    postMessage([`import_reply`, modelRegistry, version]);
   }
 };
 
 const log = (message) => {
   console.debug(message);
+}
+
+const isExprimental = (from, to) => {
+  return `${from}${to}` in modelRegistry && modelRegistry[`${from}${to}`]["model"].modelType === "dev"
 }
 
 onmessage = async function(e) {
@@ -42,6 +52,9 @@ onmessage = async function(e) {
         await constructTranslationModel(from, to);
         log(`Model '${from}${to}' successfully constructed. Time taken: ${(Date.now() - start) / 1000} secs`);
         result = "Model successfully loaded";
+        if (isExprimental(from, to) || isExprimental(from, 'en') || isExprimental('en', to)) {
+          result +=  ". This model is experimental"
+        }
       } catch (error) {
         log(`Model '${from}${to}' construction failed: '${error.message}'`);
         result = "Model loading failed";
@@ -167,10 +180,10 @@ quiet-translation: true
 gemm-precision: int8shiftAll
 `;
 
-  const modelFile = `${rootURL}/${languagePair}/${modelRegistry[languagePair]["model"].name}`;
-  const shortlistFile = `${rootURL}/${languagePair}/${modelRegistry[languagePair]["lex"].name}`;
-  const vocabFiles = [`${rootURL}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`,
-                      `${rootURL}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`];
+  const modelFile = `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["model"].name}`;
+  const shortlistFile = `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["lex"].name}`;
+  const vocabFiles = [`${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`,
+                      `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`];
 
   const uniqueVocabFiles = new Set(vocabFiles);
   log(`modelFile: ${modelFile}\nshortlistFile: ${shortlistFile}\nNo. of unique vocabs: ${uniqueVocabFiles.size}`);
