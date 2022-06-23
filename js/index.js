@@ -25,7 +25,7 @@ const langs = {
     "pt": "Portuguese",
     "ru": "Russian",
     "es": "Spanish",
-    "uk": "Ukranian"
+    "uk": "Ukrainian"
 };
 
 let supportedFromCodes = {};

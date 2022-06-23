@@ -139,7 +139,7 @@ const constructTranslationModelInvolvingEnglish = async (from, to) => {
 
   /*Set the Model Configuration as YAML formatted string.
     For available configuration options, please check: https://marian-nmt.github.io/docs/cmd/marian-decoder/
-    Vocab files are re-used in both translation directions
+    Vocab files are re-used in both translation directions for some models
     const vocabLanguagePair = from === "en" ? `${to}${from}` : languagePair;
     const modelConfig = `models:
       - /${languagePair}/model.${languagePair}.intgemm.alphas.bin
@@ -180,11 +180,18 @@ quiet-translation: true
 gemm-precision: int8shiftAll
 `;
 
-  const modelFile = `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["model"].name}`;
-  const shortlistFile = `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["lex"].name}`;
-  const vocabFiles = [`${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`,
-                      `${rootURL}/${version}/${languagePair}/${modelRegistry[languagePair]["vocab"].name}`];
-
+  const commonPath = `${rootURL}/${version}/${languagePair}`
+  const modelFile = `${commonPath}/${modelRegistry[languagePair]["model"].name}`;
+  let vocabFiles;
+  const shortlistFile = `${commonPath}/${modelRegistry[languagePair]["lex"].name}`;
+  if (("srcvocab" in modelRegistry[languagePair]) && ("trgvocab" in modelRegistry[languagePair])) {
+        vocabFiles = [`${commonPath}/${modelRegistry[languagePair]["srcvocab"].name}`,
+                      `${commonPath}/${modelRegistry[languagePair]["trgvocab"].name}`];
+  }
+  else {
+    vocabFiles = [`${commonPath}/${modelRegistry[languagePair]["vocab"].name}`,
+                  `${commonPath}/${modelRegistry[languagePair]["vocab"].name}`];
+  }
   const uniqueVocabFiles = new Set(vocabFiles);
   log(`modelFile: ${modelFile}\nshortlistFile: ${shortlistFile}\nNo. of unique vocabs: ${uniqueVocabFiles.size}`);
   uniqueVocabFiles.forEach(item => log(`unique vocabFile: ${item}`));
