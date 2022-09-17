@@ -41,9 +41,18 @@ document.querySelector("#input").addEventListener("keyup", function (event) {
     translateCall();
 });
 
+const getInputText = () => {
+    return $("#input").value + "  ";
+};
+
+const clearOutput = () => {
+    $('#output').value = '';
+};
+
 const translateCall = () => {
-    const text = document.querySelector("#input").value + "  ";
-    if (!text.trim().length) return;
+    const text = getInputText();
+    // if the input field is empty, clear the output field immediately
+    if (!text.trim().length) { return void clearOutput(); }
     const paragraphs = text.split("\n");
     $("#output").setAttribute("disabled", true);
     const lngFrom = langFrom.value;
@@ -52,7 +61,13 @@ const translateCall = () => {
 };
 
 worker.onmessage = function (e) {
+    const text = getInputText().trim();
+    // clear any leftover output text if the input field is empty
+    if (!text) { clearOutput(); }
     if (e.data[0] === "translate_reply" && e.data[1]) {
+        // don't display any new results if the input field
+        // has been emptied while this translation has been processed
+        if (!text) { return; }
         document.querySelector("#output").value = e.data[1].join("\n\n");
         $("#output").removeAttribute("disabled");
     } else if (e.data[0] === "load_model_reply" && e.data[1]) {
