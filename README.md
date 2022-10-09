@@ -28,7 +28,7 @@ Compatible and tested on:
 
   ```bash
   node -v
-  v12.14.1
+  v16.17.1
   ```
 
 - For containerized version:

@@ -39,4 +39,8 @@ In python, not js, and hasn't been used in 3 years, but good for many services (
 https://github.com/mozilla/translate
 Worked correctly with minimal install issues, ripe to dockerise and continue the tasks
 
-So decision is translate! but need to start improving documentation to run it locally
+So decision is translate! but need to start improving documentation to run it locally. Succeeded in deploying it local host from command line
+
+2.  Build and deploy app with docker-compose.
+
+- Composing a simple Dockerfile that packages web app
