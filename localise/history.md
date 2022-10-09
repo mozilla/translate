@@ -43,4 +43,6 @@ So decision is translate! but need to start improving documentation to run it lo
 
 2.  Build and deploy app with docker-compose.
 
-- Composing a simple Dockerfile that packages web app
+- Compose a simple Dockerfile that packages web app
+- Check that behaviour is unchanged from the container to the browser
+- Create a docker compose template file

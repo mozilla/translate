@@ -64,3 +64,18 @@ firefox http://localhost
 # Mac OS
 open -a firefox -g http://localhost
 ```
+
+### Container mode
+
+To build the container:
+```bash
+IMAGE_TAG=translate_node16
+echo ${IMAGE_TAG}
+docker build --tag ${IMAGE_TAG} .
+```
+then all you have to do is run it and expose the port:
+
+```bash
+docker run -it -p 80:80 ${I
+-it -p 80:80 ${IMAGE_TAG}
+```
