@@ -1,13 +1,17 @@
 ## Translations Website
 
+## Introduction
+
 This repo contains a static website utilizing the proceedings of project [Bergamot](https://browser.mt/).
 
 The concept is the same as [Firefox Translation](https://github.com/mozilla-extensions/firefox-translations), where the inference occurs entirely in the webpage by utilizing the WebAssembly port of the neural machine translation engine [(marian)](https://github.com/mozilla/bergamot-translator), while the models are dynamically downloaded and loaded as the user switches between the languages.
 
 ## Live Demo
+
 The live demo is hosted on Github Pages and published on https://mozilla.github.io/translate.
 
 Compatible and tested on:
+
 - Firefox desktop
 - Chrome desktop
 - Edge desktop
@@ -15,10 +19,48 @@ Compatible and tested on:
 - Firefox Nightly for Android
 - Chrome for Android
 
-## Testing locally
+## Development
 
+### Prerequisites
+
+- For local console
+  Nodejs
+
+  ```bash
+  node -v
+  v12.14.1
+  ```
+
+- For containerized version:
+  Docker Engine
+  ```bash
+  docker -v
+  Docker version 20.10.8, build 3967b7d
+  ```
+
+### Console
+
+```bash
+# Install dependencies
+npm install
+# Start nodejs embedded server
+bash start_dev_server.sh
+# You should see:
+# Start httpserver
+# HTTP and BinaryJS server started on port 80
 ```
-$npm install
-$bash start_dev_server.sh
-$firefox https://mozilla.github.io/translate
+
+Now you can Open Firefox Browser new window and go to your [localhost](http://localhost).
+Live version can be found at[mozilla.github.io/translate](https://mozilla.github.io/translate)
+
+- Alternatively by:
+
+```bash
+# confirm is working
+curl -k -s -o /dev/null -w "%{http_code}\n" http://localhost/
+# Should return OK: 200
+# Windows
+firefox http://localhost
+# Mac OS
+open -a firefox -g http://localhost
 ```
