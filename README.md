@@ -37,7 +37,12 @@ Compatible and tested on:
   docker -v
   Docker version 20.10.8, build 3967b7d
   ```
-
+  Docker compose
+  
+  ```bash
+  docker compose version
+  Docker Compose version v2.10.2
+  ```
 ### Console
 
 ```bash
@@ -76,6 +81,12 @@ docker build --tag ${IMAGE_TAG} .
 then all you have to do is run it and expose the port:
 
 ```bash
-docker run -it -p 80:80 ${I
--it -p 80:80 ${IMAGE_TAG}
+docker run -it -p 80:80 ${IMAGE_TAG}
+# see logs
+#  when running, do it like:
+CONTAINER_ID=$(docker run -d --rm ${IMAGE_TAG})
+# or with docker ps, and then:
+docker logs -f ${CONTAINER_ID}
+# if you need to troubleshoot
+docker exec -it ${CONTAINER_ID} /bin/bash
 ```

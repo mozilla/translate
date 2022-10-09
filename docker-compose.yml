@@ -1,0 +1,31 @@
+version: "3.7"
+
+services:
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    working_dir: /usr/src/frontend
+    volumes:
+      - ./:/usr/src/frontend
+    networks:
+      - back-tier
+    
+  mysql:
+    image: mysql:5.7    
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: translate
+    networks:
+      - back-tier
+    volumes:
+      - translate-data:/var/lib/mysql
+
+volumes:
+  translate-data:
+
+networks:
+  back-tier: {}
