@@ -47,3 +47,5 @@ So decision is translate! but need to start improving documentation to run it lo
 - Check that behaviour is unchanged from the container to the browser
 - Create a docker compose template file
 - Migrate existing Dockerfile into multi service docker compose (but not being used)
+
+3. CI/CD
