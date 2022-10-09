@@ -51,3 +51,4 @@ So decision is translate! but need to start improving documentation to run it lo
 3. CI/CD with IaC
 - Create basic test/scan/deploy CI
 - welp, this app doesn't have any testing whastsoever :( 
+- At least we were able to show a minimal audit vulnerability

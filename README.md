@@ -1,5 +1,9 @@
 ## Translations Website
 
+### Build Status
+
+[![build](https://github.com/marcosnr/translate/actions/workflows/build.yml/badge.svg)](https://github.com/marcosnr/translate/actions/workflows/build.yml)
+
 ## Introduction
 
 This repo contains a static website utilizing the proceedings of project [Bergamot](https://browser.mt/).
