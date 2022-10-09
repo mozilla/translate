@@ -48,4 +48,6 @@ So decision is translate! but need to start improving documentation to run it lo
 - Create a docker compose template file
 - Migrate existing Dockerfile into multi service docker compose (but not being used)
 
-3. CI/CD
+3. CI/CD with IaC
+- Create basic test/scan/deploy CI
+- welp, this app doesn't have any testing whastsoever :( 
