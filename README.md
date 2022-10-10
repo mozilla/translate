@@ -23,6 +23,15 @@ Compatible and tested on:
 - Firefox Nightly for Android
 - Chrome for Android
 
+## Code Guidelines
+
+When working on this project, please bear in mind that:
+
+- Instructions must be as clear as possible, with links for navigation
+- Every time you introduce a new tool, include it under resources. If the change is a substantial Infrastructure/Design shift. Attach an [Architecture Design Record](https://cloud.google.com/architecture/architecture-decision-records) documntation for it.
+- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/localise//TODOs.md) for this.
+
+
 ## Development
 
 ### Prerequisites
@@ -47,6 +56,7 @@ Compatible and tested on:
   docker compose version
   Docker Compose version v2.10.2
   ```
+
 ### Console
 
 ```bash
@@ -94,3 +104,8 @@ docker logs -f ${CONTAINER_ID}
 # if you need to troubleshoot
 docker exec -it ${CONTAINER_ID} /bin/bash
 ```
+
+### Resources
+
+- [Docker documentation](https://docs.docker.com/)
+- [NPM audit documentation](https://docs.npmjs.com/cli/v6/commands/npm-audit)

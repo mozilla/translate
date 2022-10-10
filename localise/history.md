@@ -24,9 +24,20 @@ Get a napkin, do a diagram / workflow and plan, start with the end in mind!
 9.  Submit a GitHub repository URL with all the source code and a README.md file
     with all the steps needed so we can build environment ourselves.
 
+### Extra Requirements
+
+The objective is to assess how you work, so make sure:
+
+Req. [Docs] :
+
+- Instructions must be as clear as possible, with links for navigation
+- Every change is tied up to a requirement,described in the commit subject (e.g. mimick integration with Jira / Task tracking software)
+- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/TODOs.md) for this.
+
+
 ## Change log
 
-1.  - Find a web simple website - fork it.
+Req. [01]  - Find a web simple website - fork it.
 
 Found 3 possibilities:
 
@@ -41,14 +52,14 @@ Worked correctly with minimal install issues, ripe to dockerise and continue the
 
 So decision is translate! but need to start improving documentation to run it locally. Succeeded in deploying it local host from command line
 
-2.  Build and deploy app with docker-compose.
+Req. [02] -  Build and deploy app with docker-compose.
 
 - Compose a simple Dockerfile that packages web app
 - Check that behaviour is unchanged from the container to the browser
 - Create a docker compose template file
 - Migrate existing Dockerfile into multi service docker compose (but not being used)
 
-3. CI/CD with IaC
+Req. [03] - CI/CD with IaC
 - Create basic test/scan/deploy CI
-- welp, this app doesn't have any testing whastsoever :( 
-- At least we were able to show a minimal audit vulnerability
+- welp! :\ this app doesn't have any testing whastsoever :( 
+- At least we were able to show a minimal audit vulnerability with `npm audit`
