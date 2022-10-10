@@ -29,7 +29,7 @@ When working on this project, please bear in mind that:
 
 - Instructions must be as clear as possible, with links for navigation
 - Every time you introduce a new tool, include it under resources. If the change is a substantial Infrastructure/Design shift. Attach an [Architecture Design Record](https://cloud.google.com/architecture/architecture-decision-records) documntation for it.
-- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/localise//TODOs.md) for this.
+- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/localise/TODOs.md) for this.
 
 
 ## Development
