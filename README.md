@@ -104,9 +104,10 @@ docker logs -f ${CONTAINER_ID}
 # if you need to troubleshoot
 docker exec -it ${CONTAINER_ID} /bin/bash
 ```
+
 ### CI/CD
 
-This project leverages [Github actions](). Templates can be found on the [/.]() folder
+This project leverages [Github actions](https://github.com/features/actions). Templates can be found on the [.github/workflows/build.yml](/.github/workflows/build.yml) folder
 
 - If your deployment fails because audit step found a vulnerability, you can try to issue 
 
