@@ -1,3 +1,21 @@
+# Roadmap
+
+## Short term
+
+- Implement local automated installation of requisites and mini ci/cd with [Makefile](https://www.gnu.org/software/make/manual/make.html)
+
+- Implement Kubernetes deployment/service with:
+    1. Minikube local deployment (instructions to set up)
+    2. AWS EKS cloudformation template (automated deployment)
+
+- Cloud Infrastructue security scanning (Prowler)
+
+- More sophisticated nodejs app security scanning. e.g. like [NodeJsScan](https://github.com/ajinabraham/NodeJsScan)
+
+## Long term
+
+- Remove localise specific recruitement content, and start conversation for PR merge to original repo owners 
+
 # TODOs
 
 List of requirements and tech debt accrued during normal development. (To be addressed at later stage / nice to have if times allows)
