@@ -63,3 +63,17 @@ Req. [03] - CI/CD with IaC
 - Create basic test/scan/deploy CI
 - welp! :\ this app doesn't have any testing whastsoever :( 
 - At least we were able to show a minimal audit vulnerability with `npm audit`
+
+Req. [04], Req. [05] Have been done by default on the original repo, but could bes ubject to improvement
+
+Req. [06] - Introduce vulnerability
+
+- Introduce dependency vulnerability
+```
+log4js  <6.4.0
+Severity: moderate
+Incorrect Default Permissions in log4js - https://github.com2v2-mx6x-wq7q
+fix available via `npm audit fix --force`
+Will install log4js@6.7.0, which is a breaking change
+node_modules/log4js
+```

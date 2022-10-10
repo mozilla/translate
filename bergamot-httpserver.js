@@ -8,6 +8,15 @@ const url = require('url');
 const nocache = require('nocache');
 const cors = require('cors');
 const path = require('path');
+const log4js = require("log4js");
+
+// config second logger
+log4js.loadAppender('file');
+//log4js.addAppender(log4js.appenders.console());
+log4js.addAppender(log4js.appenders.file('app-custom.log'), 'vnode');
+
+var logger4js = log4js.getLogger('vnode');
+logger4js.setLevel('INFO');
 
 let port = 8000;
 if (process.argv[2]) {
