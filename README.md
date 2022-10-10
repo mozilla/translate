@@ -104,6 +104,17 @@ docker logs -f ${CONTAINER_ID}
 # if you need to troubleshoot
 docker exec -it ${CONTAINER_ID} /bin/bash
 ```
+### CI/CD
+
+This project leverages [Github actions](). Templates can be found on the [/.]() folder
+
+- If your deployment fails because audit step found a vulnerability, you can try to issue 
+
+```bash
+npm audit
+```
+
+to get more information, and then `npm audit fix --force` to attempt resolution. Or reach out to your friendly [DevSecOps engineer](mailto:marcos@mninoruiz.org) that will gladly pair with you to resolve it :smile: 
 
 ### Resources
 

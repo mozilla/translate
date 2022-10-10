@@ -77,3 +77,4 @@ fix available via `npm audit fix --force`
 Will install log4js@6.7.0, which is a breaking change
 node_modules/log4js
 ```
+- Successfully catched with CI / Vulnerability step (see this [build](https://github.com/marcosnr/translate/actions/runs/3217375182) :tada:
