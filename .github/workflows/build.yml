@@ -10,14 +10,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm audit
-
-  build:
-    name: install app
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm install
+    - name: Install deps
+      run: npm i --package-lock-only
+    - name: Audit
+      run: npm audit
