@@ -3,5 +3,11 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "nocache": "^2.1.0"
+  },
+  "scripts": {
+    "test": "jest"
+    },
+  "devDependencies": {
+    "jest": "^29.1.2"
   }
 }

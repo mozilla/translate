@@ -8,21 +8,20 @@ Get a napkin, do a diagram / workflow and plan, start with the end in mind!
 
 ### Requirements
 
-1.  Find a web simple website - fork it.
-2.  Build and deploy app with docker-compose, VM or on local k8s. Reproduce all the steps locally
-3.  Use IaC as much as possible - for example: docker-compose, helm, terraform
-    04.1. Build simple script which will mimic CI/CD or you can use some containerised CI/CD
+[Req 1].  Find a web simple website - fork it.
+[Req 2].  Build and deploy app with docker-compose, VM or on local k8s. Reproduce all the steps locally
+[Req 3].  Use IaC as much as possible - for example: docker-compose, helm, terraform
+[Req 4.1]. Build simple script which will mimic CI/CD or you can use some containerised CI/CD
     tool
-    04.2. Include security scan stage in it, open source vulnerability scan tool
-4.  Do the change, submit it to the local repo, build artefact and deploy it - everything
+[Req 4.2]. Include security scan stage in it, open source vulnerability scan tool
+[Req 5].  Do the change, submit it to the local repo, build artefact and deploy it - everything
     locally
-5.  App should be accessible from the browser
-6.  Introduce some vulnerability - piece of code that will cause security check to fail
-7.  Run CI/CD again
-8.  Deployment should fail on security scan stage in CI/CD and send notification to
+[Req 6].  App should be accessible from the browser
+[Req 7].  Introduce some vulnerability - piece of code that will cause security check to fail
+[Req 8].  Run CI/CD again
+[Req 9].  Deployment should fail on security scan stage in CI/CD and send notification to
     console
-9.  Submit a GitHub repository URL with all the source code and a README.md file
-    with all the steps needed so we can build environment ourselves.
+[Req 10].  Submit a GitHub repository URL with all the source code and a README.md file with all the steps needed so we can build environment ourselves.
 
 ### Extra Requirements
 
@@ -80,3 +79,10 @@ node_modules/log4js
 - Successfully catched with CI / Vulnerability step (see this [build](https://github.com/marcosnr/translate/actions/runs/3217375182) :tada:
 
 - End of MVP. But need to go again through all the steps and make it more suitable for purpose (showcase tech skills). To that end added roadmap section in the [TODOs section](/localise/TODOs.md) for this.
+
+- Removed the vulnerability to keep working on better features
+- Optimized the workflow
+
+[Req 4.3] Introduce a more sophisticated vulnerability tool
+
+ - First add the support to run Jest unit tests (hopefully developer will get the hint :P )

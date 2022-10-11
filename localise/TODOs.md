@@ -8,7 +8,9 @@
     1. Minikube local deployment (instructions to set up)
     2. AWS EKS cloudformation template (automated deployment)
 
-- Cloud Infrastructue security scanning (Prowler)
+- Container Security Scanning (Falco, Snyk)
+
+- Cloud Infrastructue security scanning (Prowler, OPA)
 
 - More sophisticated nodejs app security scanning. e.g. like [NodeJsScan](https://github.com/ajinabraham/NodeJsScan)
 
@@ -25,3 +27,4 @@ List of requirements and tech debt accrued during normal development. (To be add
 - Find a slimmed down version node image for docker, like `nodejs:16.17.1-alpine`??
 - Create a meaningful justification for using docker-compose (e.g. multi-containers), adding a sql server but not really used now?
 - Add some basic [Jest](https://jestjs.io/) Unit tests
+- Add linting with ESlint
