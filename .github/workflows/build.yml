@@ -22,4 +22,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm run lint
+      - name: Install deps
+        run: npm install --dev
+      - name: Lint
+        run: npm run lint
