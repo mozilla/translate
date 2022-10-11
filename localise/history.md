@@ -86,3 +86,4 @@ node_modules/log4js
 [Req 4.3] Introduce a more sophisticated vulnerability tool
 
  - First add the support to run Jest unit tests (hopefully developer will get the hint :P )
+ - Added also ESLint for completion purposes, but code is very dirty so need to only warn and by-pass

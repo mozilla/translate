@@ -27,3 +27,15 @@ jobs:
       - name: Lint
         run: npm run lint
         continue-on-error: true # code is very dirty
+  Audit:
+    name: audit vulnerabilities
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install deps
+        run: npm install
+      - name: Audit
+        run: npm run audit
