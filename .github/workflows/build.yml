@@ -39,3 +39,22 @@ jobs:
         run: npm install
       - name: Audit
         run: npm run audit
+  ContainerScan:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Build
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: user/app:latest
+      -
+        name: Scan for vulnerabilities
+        uses: crazy-max/ghaction-container-scan@v1
+        with:
+          image: user/app:latest
+          severity_threshold: HIGH

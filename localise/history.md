@@ -85,6 +85,9 @@ node_modules/log4js
 
 [Req 4.3] Introduce a more sophisticated vulnerability tool
 
- - First add the support to run Jest unit tests (hopefully developer will get the hint :P )
+ First and foremost, security is a integrative approach! It has to be incorporated in the local development before it even reaches the repo. Also a sloppy, hard to read code is more likely to be unsafe / be depracated and not maintained sooner! Therefore, Unit Testing and Linting, while not security per se, are paramount!
+ 
+ - Add the support to run Jest unit tests (hopefully developer will get the hint :P )
  - Added also ESLint for completion purposes, but code is very dirty so need to only warn and by-pass
  - Added out of the box Docker scan for vulnerabilities (but is freemium usage with Snyx)
+ - Added container scanning from the CI layer as well
