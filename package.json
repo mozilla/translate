@@ -1,13 +1,15 @@
 {
   "dependencies": {
+    "better-npm-audit": "^3.7.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "nocache": "^2.1.0"
   },
   "scripts": {
     "test": "jest",
-    "lint": "eslint js/*.js"
-
+    "lint": "eslint js/*.js",
+    "prepush": "npm run test && npm run audit",
+    "audit": "better-npm-audit audit"
   },
   "devDependencies": {
     "eslint": "^8.25.0",

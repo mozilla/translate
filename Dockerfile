@@ -1,5 +1,5 @@
 
-FROM node:16
+FROM node:16-alpine
 
 # ARG NPM_TOKEN
 

@@ -28,3 +28,4 @@ List of requirements and tech debt accrued during normal development. (To be add
 - Create a meaningful justification for using docker-compose (e.g. multi-containers), adding a sql server but not really used now?
 - Add some basic [Jest](https://jestjs.io/) Unit tests
 - Add linting with ESlint
+- Find a container scanning that is not freemium / reuired to have two accounts online. For instance [Clair](https://github.com/quay/clair)
