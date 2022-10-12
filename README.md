@@ -4,6 +4,10 @@
 
 [![build](https://github.com/marcosnr/translate/actions/workflows/build.yml/badge.svg)](https://github.com/marcosnr/translate/actions/workflows/build.yml)
 
+### Lokalise Introduction
+
+Please refer to the [Lokalise Roadmap](/lokalise/Roadmap.md) To understand the rationale behind this Home Task Assignment.
+
 ## Introduction
 
 This repo contains a static website utilizing the proceedings of project [Bergamot](https://browser.mt/).
@@ -29,7 +33,7 @@ When working on this project, please bear in mind that:
 
 - Instructions must be as clear as possible, with links for navigation
 - Every time you introduce a new tool, include it under resources. If the change is a substantial Infrastructure/Design shift. Attach an [Architecture Design Record](https://cloud.google.com/architecture/architecture-decision-records) documntation for it.
-- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/localise/TODOs.md) for this.
+- Any and every technical debt accrued must be recorded (e.g. transparency and accountability for backlog groming, planning, etc.) See the [TODOs section](/lokalise/TODOs.md) for this.
 
 
 ## Development
@@ -109,6 +113,13 @@ docker logs -f ${CONTAINER_ID}
 # if you need to troubleshoot
 docker exec -it ${CONTAINER_ID} /bin/bash
 ```
+- Leveraging Docker compose for multicontainer orchestration
+This is a scaffolding to create persistence capabilities with a MySQL database, but need actual code to connect to it.
+
+```bash
+docker compose up #repeat same steps to see onlin
+docker compose down
+```
 
 - Tagging and pushing your image (necessary to perform container scanning)
 
@@ -121,7 +132,8 @@ echo "Confirm: Local Image name: ${IMAGE_BASE}:${IMAGE_TAG} Remote: ${REPOSITORY
 docker tag ${IMAGE_BASE}:${IMAGE_TAG} ${REPOSITORY_NAME}/${IMAGE_BASE}:${IMAGE_TAG}
 docker push ${REPOSITORY_NAME}/${IMAGE_BASE}:${IMAGE_TAG}
 ```
-you can also use the available script to publish: [/scripts/publishDockerImage.sh](/scripts/publishDockerImage.sh)
+
+- You can also use the available script to publish: [/scripts/publishDockerImage.sh](/scripts/publishDockerImage.sh)
 
 ```bash
 ./scripts/publishDockerImage.sh
@@ -137,9 +149,9 @@ This project leverages [Github actions](https://github.com/features/actions). Te
 npm run audit 
 ```
 
-to get more information, and then `npm audit fix --force` to attempt resolution. We use []() Or reach out to your friendly [DevSecOps engineer](mailto:marcos@mninoruiz.org) that will gladly pair with you to resolve it :smile: 
+- To get more information, and then `npm audit fix --force` to attempt resolution. We use []() Or reach out to your friendly [DevSecOps engineer](mailto:marcos@mninoruiz.org) that will gladly pair with you to resolve it :smile: 
 
-### Container scanning
+### Container Vulnerability scanning
 
 To use built in Docker Scan, you need to have a valid login session to DockerHub (obtain one with `docker login` and enter your credentials). Bear in mind you only have 10 free scans a month unless you link it with a Snyx free account as well (using `--token SNYK_AUTH_TOKEN` in the command)
 
@@ -148,7 +160,11 @@ echo ${IMAGE_NAME}
 docker scan --dependency-tree -f Dockerfile ${IMAGE_NAME} # you may add "--exclude-base" for faster scan
 ```
 
+Nonetheless, there's a dedicated step in the CI/CD pipeline that will publish and Scan containers automatically.
+
 ### Resources
 
+- [Lokalise Home Assignment Roadmap](/lokalise/Roadmap.md)
 - [Docker documentation](https://docs.docker.com/)
 - [NPM audit documentation](https://docs.npmjs.com/cli/v6/commands/npm-audit)
+- [GitHub Action for Container Scanning](https://github.com/crazy-max/ghaction-container-scan)

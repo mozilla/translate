@@ -29,3 +29,4 @@ List of requirements and tech debt accrued during normal development. (To be add
 - Add some basic [Jest](https://jestjs.io/) Unit tests
 - Add linting with ESlint
 - Find a container scanning that is not freemium / reuired to have two accounts online. For instance [Clair](https://github.com/quay/clair)
+- Move Container scanning only on PR, with tag name as branch 
