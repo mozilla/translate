@@ -87,15 +87,17 @@ open -a firefox -g http://localhost
 ### Container mode
 
 To build the container:
+
 ```bash
 IMAGE_TAG=translate_node16
 echo ${IMAGE_TAG}
 docker build --tag ${IMAGE_TAG} .
 ```
+
 then all you have to do is run it and expose the port:
 
 ```bash
-docker run -it -p 80:80 ${IMAGE_TAG}
+docker run -it -p 80:80 ${IMAGE_TAG} #add -d to have it detached
 # see logs
 #  when running, do it like:
 CONTAINER_ID=$(docker run -d --rm ${IMAGE_TAG})
@@ -112,10 +114,19 @@ This project leverages [Github actions](https://github.com/features/actions). Te
 - If your deployment fails because audit step found a vulnerability, you can try to issue 
 
 ```bash
-npm audit
+npm run audit 
 ```
 
-to get more information, and then `npm audit fix --force` to attempt resolution. Or reach out to your friendly [DevSecOps engineer](mailto:marcos@mninoruiz.org) that will gladly pair with you to resolve it :smile: 
+to get more information, and then `npm audit fix --force` to attempt resolution. We use []() Or reach out to your friendly [DevSecOps engineer](mailto:marcos@mninoruiz.org) that will gladly pair with you to resolve it :smile: 
+
+### Container scanning
+
+To use built in Docker Scan, you need to have a valid login session to DockerHub (obtain one with `docker login` and enter your credentials). Bear in mind you only have 10 free scans a month unless you link it with a Snyx free account as well (using `--token SNYK_AUTH_TOKEN` in the command)
+
+```bash
+echo ${IMAGE_TAG}
+docker scan --dependency-tree -f Dockerfile ${IMAGE_TAG} # you may add "--exclude-base" for faster scan
+```
 
 ### Resources
 

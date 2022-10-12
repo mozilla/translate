@@ -87,3 +87,4 @@ node_modules/log4js
 
  - First add the support to run Jest unit tests (hopefully developer will get the hint :P )
  - Added also ESLint for completion purposes, but code is very dirty so need to only warn and by-pass
+ - Added out of the box Docker scan for vulnerabilities (but is freemium usage with Snyx)
