@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: translate_deployment
+spec:
+replicas: 3
+selector:
+matchLabels:
+app: translate
+template:
+metadata:
+labels:
+app: translate
+spec:
+containers:
+- name: translate
+image: mninoruiz/translate:latest
+ports:
+- containerPort: 80
