@@ -89,22 +89,42 @@ open -a firefox -g http://localhost
 To build the container:
 
 ```bash
-IMAGE_TAG=translate_node16
-echo ${IMAGE_TAG}
-docker build --tag ${IMAGE_TAG} .
+IMAGE_NAME=translate
+echo ${IMAGE_NAME}
+docker build --tag ${IMAGE_NAME} .
 ```
 
 then all you have to do is run it and expose the port:
 
 ```bash
-docker run -it -p 80:80 ${IMAGE_TAG} #add -d to have it detached
+docker run -it -p 80:80 ${IMAGE_NAME} #add -d to have it detached
+# Now you can check again in your browser... alternatively:
+# check port is listening
+curl -v -s http://localhost/ 1> /dev/null # headers only
 # see logs
 #  when running, do it like:
-CONTAINER_ID=$(docker run -d --rm ${IMAGE_TAG})
+CONTAINER_ID=$(docker run -d --rm -p 80:80 ${IMAGE_NAME})
 # or with docker ps, and then:
 docker logs -f ${CONTAINER_ID}
 # if you need to troubleshoot
 docker exec -it ${CONTAINER_ID} /bin/bash
+```
+
+- Tagging and pushing your image (necessary to perform container scanning)
+
+```bash
+IMAGE_BASE='translate'
+IMAGE_TAG=$(git rev-parse --short HEAD)
+docker build -t ${IMAGE_BASE}:${IMAGE_TAG} .
+REPOSITORY_NAME=mninoruiz #change this if you want your personal one
+echo "Confirm: Local Image name: ${IMAGE_BASE}:${IMAGE_TAG} Remote: ${REPOSITORY_NAME}/${IMAGE_BASE}:${IMAGE_TAG}"
+docker tag ${IMAGE_BASE}:${IMAGE_TAG} ${REPOSITORY_NAME}/${IMAGE_BASE}:${IMAGE_TAG}
+docker push ${REPOSITORY_NAME}/${IMAGE_BASE}:${IMAGE_TAG}
+```
+you can also use the available script to publish: [/scripts/publishDockerImage.sh](/scripts/publishDockerImage.sh)
+
+```bash
+./scripts/publishDockerImage.sh
 ```
 
 ### CI/CD
@@ -124,8 +144,8 @@ to get more information, and then `npm audit fix --force` to attempt resolution.
 To use built in Docker Scan, you need to have a valid login session to DockerHub (obtain one with `docker login` and enter your credentials). Bear in mind you only have 10 free scans a month unless you link it with a Snyx free account as well (using `--token SNYK_AUTH_TOKEN` in the command)
 
 ```bash
-echo ${IMAGE_TAG}
-docker scan --dependency-tree -f Dockerfile ${IMAGE_TAG} # you may add "--exclude-base" for faster scan
+echo ${IMAGE_NAME}
+docker scan --dependency-tree -f Dockerfile ${IMAGE_NAME} # you may add "--exclude-base" for faster scan
 ```
 
 ### Resources
