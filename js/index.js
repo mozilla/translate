@@ -10,6 +10,7 @@ const langTo = $("#lang-to");
 
 const langs = {
     "bg": "Bulgarian",
+    "ca": "Catalan",
     "cs": "Czech",
     "nl": "Dutch",
     "en": "English",
