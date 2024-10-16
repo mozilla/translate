@@ -1,6 +1,6 @@
 ## Translations Website
 
-**!!! This website is only for testing the latest models form the model registry. Use about:translations in Firefox instead !!!**
+**!!! This website is only for testing the latest models from the model registry. Use about:translations in Firefox instead !!!**
 
 This repo contains a static website utilizing the proceedings of project [Bergamot](https://browser.mt/).
 
