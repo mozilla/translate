@@ -4,9 +4,18 @@ var translationService, responseOptions, input = undefined;
 var translationModels = new Map();
 
 const BERGAMOT_TRANSLATOR_MODULE = "bergamot-translator-worker.js";
-const MODEL_REGISTRY = "registry.json";
-const rootURL = "https://storage.googleapis.com/bergamot-models-sandbox";
-let version = null;
+// this does't require CORS enabled, but it doesn't return the actual file from git LFS, only a pointer. It's ok to use for regular files like model registry
+const githubRaw = "https://raw.githubusercontent.com/mozilla/firefox-translations-models/refs/heads/main"
+// free and potentially unsecure proxy
+const proxy = "https://corsproxy.io/?"
+// this returns the correct file from git LFS but requires CORS on the server side, so it requires using a proxy
+const githubLfs = "https://github.com/mozilla/firefox-translations-models/raw/refs/heads/main"
+// retrieve model registry with file hash sums with a secure URL
+const modelRegistryUrl = `${githubRaw}/registry.json`
+// this website is for testing only, so it should be fine to use a proxy. also we verify hash sums of the downloaded files using the ones from the securely downloaded model registry
+const githubLfsUrl = proxy+githubLfs;
+
+const version = "github latest";
 let modelRegistry = null;
 
 const encoder = new TextEncoder(); // string to utf-8 converter
@@ -21,9 +30,7 @@ var Module = {
   }],
   onRuntimeInitialized: async function() {
     log(`Wasm Runtime initialized Successfully (preRun -> onRuntimeInitialized) in ${(Date.now() - moduleLoadStart) / 1000} secs`);
-    let resp = await fetch(`${rootURL}/latest.txt`);
-    version = await resp.text();
-    resp = await fetch(`${rootURL}/${version}/${MODEL_REGISTRY}`);
+    resp = await fetch(modelRegistryUrl);
     modelRegistry = await resp.json();
     postMessage([`import_reply`, modelRegistry, version]);
   }
@@ -82,13 +89,31 @@ onmessage = async function(e) {
   }
 }
 
-// This function downloads file from a url and returns the array buffer
-const downloadAsArrayBuffer = async(url) => {
+async function verifyFile(arrayBuffer, expectedHash) {
+  const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer)); // convert buffer to byte array
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join(""); // convert bytes to hex string
+
+  if (hashHex !== expectedHash) {
+    throw Error(`Downloading ${url} failed: invalid file hash`);
+  }
+}
+
+// This function downloads a gzip compressed file from a url and returns the array buffer
+const downloadAsArrayBuffer = async(url, expectedHash) => {
   const response = await fetch(url);
   if (!response.ok) {
     throw Error(`Downloading ${url} failed: HTTP ${response.status} - ${response.statusText}`);
   }
-  return response.arrayBuffer();
+  const compressedStream = response.body;
+  const decompressionStream = new DecompressionStream('gzip');
+  const decompressedStream = compressedStream.pipeThrough(decompressionStream);
+  const decompressedResponse = new Response(decompressedStream);
+  const arrayBuffer =  await decompressedResponse.arrayBuffer();
+  await verifyFile(arrayBuffer, expectedHash)
+  return arrayBuffer
 }
 
 // This function constructs and initializes the AlignedMemory from the array buffer and alignment size
@@ -180,17 +205,19 @@ quiet-translation: true
 gemm-precision: int8shiftAll
 `;
 
-  const commonPath = `${rootURL}/${version}/${languagePair}`
-  const modelFile = `${commonPath}/${modelRegistry[languagePair]["model"].name}`;
+  const commonPath = `${githubLfsUrl}/models/${modelRegistry[languagePair]["model"].modelType}/${languagePair}`
+  const modelFile = `${commonPath}/${modelRegistry[languagePair]["model"].name}.gz`;
+  const modelHash = modelRegistry[languagePair]["model"].expectedSha256Hash;
   let vocabFiles;
-  const shortlistFile = `${commonPath}/${modelRegistry[languagePair]["lex"].name}`;
+  const shortlistFile = `${commonPath}/${modelRegistry[languagePair]["lex"].name}.gz`;
+  const shortlistHash = modelRegistry[languagePair]["lex"].expectedSha256Hash;
   if (("srcvocab" in modelRegistry[languagePair]) && ("trgvocab" in modelRegistry[languagePair])) {
-        vocabFiles = [`${commonPath}/${modelRegistry[languagePair]["srcvocab"].name}`,
-                      `${commonPath}/${modelRegistry[languagePair]["trgvocab"].name}`];
+        vocabFiles = [[`${commonPath}/${modelRegistry[languagePair]["srcvocab"].name}.gz`, modelRegistry[languagePair]["srcvocab"].expectedSha256Hash],
+                      [`${commonPath}/${modelRegistry[languagePair]["trgvocab"].name}.gz`, modelRegistry[languagePair]["trgvocab"].expectedSha256Hash]];
   }
   else {
-    vocabFiles = [`${commonPath}/${modelRegistry[languagePair]["vocab"].name}`,
-                  `${commonPath}/${modelRegistry[languagePair]["vocab"].name}`];
+    vocabFiles = [[`${commonPath}/${modelRegistry[languagePair]["vocab"].name}.gz`, modelRegistry[languagePair]["vocab"].expectedSha256Hash],
+                  [`${commonPath}/${modelRegistry[languagePair]["vocab"].name}.gz`, modelRegistry[languagePair]["vocab"].expectedSha256Hash]];
   }
   const uniqueVocabFiles = new Set(vocabFiles);
   log(`modelFile: ${modelFile}\nshortlistFile: ${shortlistFile}\nNo. of unique vocabs: ${uniqueVocabFiles.size}`);
@@ -198,13 +225,15 @@ gemm-precision: int8shiftAll
 
   // Download the files as buffers from the given urls
   let start = Date.now();
-  const downloadedBuffers = await Promise.all([downloadAsArrayBuffer(modelFile), downloadAsArrayBuffer(shortlistFile)]);
+  const downloadedBuffers = await Promise.all([downloadAsArrayBuffer(modelFile, modelHash), downloadAsArrayBuffer(shortlistFile, shortlistHash)]);
   const modelBuffer = downloadedBuffers[0];
   const shortListBuffer = downloadedBuffers[1];
 
   const downloadedVocabBuffers = [];
   for (let item of uniqueVocabFiles.values()) {
-    downloadedVocabBuffers.push(await downloadAsArrayBuffer(item));
+    const path = item[0];
+    const hash = item[1];
+    downloadedVocabBuffers.push(await downloadAsArrayBuffer(path, hash));
   }
   log(`Total Download time for all files of '${languagePair}': ${(Date.now() - start) / 1000} secs`);
 
