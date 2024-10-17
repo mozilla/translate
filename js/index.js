@@ -8,26 +8,9 @@ const status = message => ($("#status").innerText = message);
 const langFrom = $("#lang-from");
 const langTo = $("#lang-to");
 
-const langs = {
-    "bg": "Bulgarian",
-    "ca": "Catalan",
-    "cs": "Czech",
-    "nl": "Dutch",
-    "en": "English",
-    "et": "Estonian",
-    "de": "German",
-    "fr": "French",
-    "is": "Icelandic",
-    "it": "Italian",
-    "nb": "Norwegian Bokmål",
-    "nn": "Norwegian Nynorsk",
-    "fa": "Persian",
-    "pl": "Polish",
-    "pt": "Portuguese",
-    "ru": "Russian",
-    "es": "Spanish",
-    "uk": "Ukrainian"
-};
+const languageNames = new Intl.DisplayNames(['en'], {
+  type: 'language'
+});
 
 let supportedFromCodes = {};
 let supportedToCodes = {};
@@ -126,7 +109,7 @@ const setLangs = (selector, langsToSet, value, exlcude) => {
     selector.innerHTML = "";
     for (const [code, type] of Object.entries(langsToSet)) {
         if (code === exlcude) continue;
-        let name = langs[code];
+        let name = languageNames.of(code);
         if (type === "dev") name += " (Beta)";
         selector.innerHTML += `<option value="${code}">${name}</option>`;
     }
