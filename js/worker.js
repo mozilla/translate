@@ -97,7 +97,7 @@ async function verifyFile(arrayBuffer, expectedHash) {
     .join(""); // convert bytes to hex string
 
   if (hashHex !== expectedHash) {
-    throw Error(`Downloading ${url} failed: invalid file hash`);
+    throw Error("Downloading failed: invalid file hash");
   }
 }
 
