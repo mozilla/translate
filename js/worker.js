@@ -131,7 +131,7 @@ const prepareAlignedMemoryFromBuffer = async (buffer, alignmentSize) => {
 // Instantiate the Translation Service
 const constructTranslationService = async () => {
   if (!translationService) {
-    var translationServiceConfig = {};
+    var translationServiceConfig = {cacheSize: 0};
     log(`Creating Translation Service with config: ${translationServiceConfig}`);
     translationService = new Module.BlockingService(translationServiceConfig);
     log(`Translation Service created successfully`);
@@ -254,7 +254,7 @@ gemm-precision: int8shiftAll
   log(`Aligned shortlist memory size: ${alignedShortlistMemory.size()}`);
 
   log(`Translation Model config: ${modelConfig}`);
-  var translationModel = new Module.TranslationModel(modelConfig, alignedModelMemory, alignedShortlistMemory, alignedVocabsMemoryList);
+  var translationModel = new Module.TranslationModel(modelConfig, alignedModelMemory, alignedShortlistMemory, alignedVocabsMemoryList, null);
   translationModels.set(languagePair, translationModel);
 }
 
@@ -280,7 +280,7 @@ const translateInvolvingEnglish = (from, to, paragraphs) => {
   translationModel = translationModels.get(languagePair);
 
   // Instantiate the arguments of translate() API i.e. ResponseOptions and input (vector<string>)
-  var responseOptions = new Module.ResponseOptions();
+  var responseOptions = new Module.VectorResponseOptions();
   let input = new Module.VectorString;
 
   // Initialize the input
